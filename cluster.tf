@@ -50,18 +50,21 @@ resource "azurerm_kubernetes_cluster" "main" {
   #}
 
   default_node_pool {
-    name                = "core"
-    node_count          = var.node_count
-    vm_size             = var.node_vm_size
-    os_disk_size_gb     = var.os_disk_size_gb
-    vnet_subnet_id      = data.azurerm_subnet.nodes.id
-    type                = "VirtualMachineScaleSets"
-    availability_zones  = var.node_availability_zones
-    enable_auto_scaling = var.enable_auto_scaling
-    min_count           = var.node_min_count
-    max_count           = var.node_max_count
-    max_pods            = var.node_max_pods
-    node_taints         = var.node_taints
+    name                  = "core"
+    orchestrator_version  = var.kubernetes_version
+    node_count            = var.node_count
+    vm_size               = var.node_vm_size
+    os_disk_size_gb       = var.os_disk_size_gb
+    vnet_subnet_id        = data.azurerm_subnet.nodes.id
+    type                  = "VirtualMachineScaleSets"
+    availability_zones    = var.node_availability_zones
+    enable_auto_scaling   = var.enable_auto_scaling
+    min_count             = var.node_min_count
+    max_count             = var.node_max_count
+    max_pods              = var.node_max_pods
+    node_taints           = var.node_taints
+    node_labels           = var.node_labels
+    enable_node_public_ip = false
   }
 
   enable_pod_security_policy = var.pod_security_policy
@@ -124,7 +127,7 @@ resource "azurerm_kubernetes_cluster" "main" {
   #  client_secret = var.client_secret
   #}
 
-  tags = local.tags
+  tags = var.tags
 
   lifecycle {
     ignore_changes = [

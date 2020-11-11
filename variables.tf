@@ -100,7 +100,14 @@ variable pod_security_policy {
 variable tags {
   type = map
   default = {
-    made-by = "terraform"
+    "made-by" = "terraform"
+  }
+}
+
+variable node_labels {
+  type = map
+  default = {
+    "service" = "kubernetes"
   }
 }
 
@@ -257,7 +264,7 @@ variable "scale_down_utilization_threshold" {
 #############################################################################
 # Addons node pool
 
-variable node_pools {
+variable "node_pools" {
   description = "Addons node pools"
   type = list(object({
     name                = string
@@ -269,6 +276,7 @@ variable node_pools {
     max_count           = number
     max_pods            = number
     node_taints         = list(string)
+    node_labels         = map(string)
   }))
   default = []
 }
