@@ -9,13 +9,9 @@ Use Terraform `0.13` and Terraform Azure Provider `2.3+`.
 ## Usage
 
 ```hcl
-
-data "azurerm_resource_group" "main" {
-  name = var.resource_group_name
-}
-
 module "aks" {
-
+  source  = "nlamirault/aks/azure"
+  version = "X.Y.Z"
 
   cluster_name = var.cluster_name
   location = var.location
@@ -65,10 +61,11 @@ module "aks" {
   scale_down_unready               = var.scale_down_unready
   scale_down_utilization_threshold = var.scale_down_utilization_threshold
 
+  tags        = var.tags
+  node_labels = var.node_labels
+
   # Addons node pool
   node_pools = var.node_pools
-
-  tags = var.tags
 }
 
 
@@ -79,22 +76,18 @@ module "aks" {
 ############################################################################
 # Provider
 
-resource_group_name = "masociete-exploitation"
-
-subscription_id = "xxxxxxxxxxxxxxx"
+resource_group_name = "myproject-dev"
 
 #############################################################################
 # Networking
 
-virtual_network_name = "fsociety-azure-run-vnet"
-subnet_name = "fsociety-azure-run-aks-nodes"
-#subnet_name_services = "fsociety-azure-run-aks-services"
-#subnet_name_pods = "fsociety-azure-run-aks-pods"
+virtual_network_name = "myproject-dev"
+subnet_name = "myproject-dev-aks-nodes"
 
 ############################################################################
 # AKS
 
-cluster_name = "fsociety-run-aks"
+cluster_name = "myproject-dev-aks"
 
 location = "francecentral"
 
@@ -104,9 +97,10 @@ rbac = true
 pod_security_policy  = false
 
 tags = {
-    "made-by"  = "terraform"
-    "customer" = "fsociety-azure"
-    "env"      = "run"
+    "env" = "dev"
+    "project" = "myproject"
+    "service" = "kubernetes"
+    "made-by" = "terraform"
 }
 
 #############################################################################
@@ -121,6 +115,11 @@ node_max_count = 4
 node_max_pods = 110
 node_availability_zones = [1, 2, 3]
 node_taints = []
+node_labels = {
+    "service" = "kubernetes"
+    "env"     = "dev"
+    "project" = "myproject"
+}
 
 #############################################################################
 # Network profile
@@ -147,7 +146,6 @@ azure_policy = false
 # Addons node pool
 
 node_pools = []
-
 ```
 
 This module creates :
