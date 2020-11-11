@@ -18,6 +18,7 @@ resource "azurerm_log_analytics_workspace" "aks" {
   location            = data.azurerm_resource_group.k8s.location
   sku                 = var.log_analytics_workspace_sku
   retention_in_days   = var.retention_in_days
+  tags                = var.tags
 }
 
 resource "azurerm_log_analytics_solution" "aks" {
@@ -26,6 +27,7 @@ resource "azurerm_log_analytics_solution" "aks" {
   location              = data.azurerm_resource_group.k8s.location
   workspace_resource_id = azurerm_log_analytics_workspace.aks.id
   workspace_name        = azurerm_log_analytics_workspace.aks.name
+  tags                  = var.tags
 
   plan {
     publisher = "Microsoft"
