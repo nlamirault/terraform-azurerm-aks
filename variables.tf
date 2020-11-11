@@ -52,6 +52,26 @@ variable virtual_network_name {
 #}
 
 #############################################################################
+# Log Analytics
+
+variable "log_analytics_workspace_name" {
+  type        = string
+  description = " The name of the resource group in which the Log Analytics workspace is created"
+}
+
+variable "log_analytics_workspace_sku" {
+  type        = string
+  description = "Specifies the Sku of the Log Analytics Workspace."
+  default     = "PerNode"
+}
+
+variable "retention_in_days" {
+  type        = string
+  description = "The workspace data retention in days"
+}
+
+
+#############################################################################
 # Kubernetes cluster
 
 variable cluster_name {

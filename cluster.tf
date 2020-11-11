@@ -100,10 +100,12 @@ resource "azurerm_kubernetes_cluster" "main" {
       enabled = var.kube_dashboard
     }
 
-    #oms_agent {
-    #  enabled                    = true
-    #  log_analytics_workspace_id = azurerm_log_analytics_workspace.workspace_aks.id
-    #}
+    oms_agent {
+      enabled                    = true
+      log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
+    }
+
+
   }
 
   auto_scaler_profile {
