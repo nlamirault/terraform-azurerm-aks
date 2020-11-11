@@ -25,6 +25,8 @@ module "aks" {
   pod_security_policy = var.pod_security_policy
   rbac                = var.rbac
 
+  api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
+
   # Default node pool
   node_count               = var.node_count
   node_vm_size             = var.node_vm_size
@@ -154,17 +156,18 @@ This module creates :
 
 ## Documentation
 
-## Providers
+### Providers
 
 | Name | Version |
 |------|---------|
 | azurerm | ~> 2.3 |
 
-## Inputs
+### Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
 | aci\_connector\_linux | n/a | `bool` | n/a | yes |
+| api\_server\_authorized\_ip\_ranges | The IP ranges to whitelist for incoming traffic to the masters. | `list(string)` | n/a | yes |
 | azure\_policy | n/a | `bool` | n/a | yes |
 | balance\_similar\_node\_groups | n/a | `bool` | `false` | no |
 | cluster\_name | Name of the AKS cluster | `string` | n/a | yes |
@@ -175,15 +178,18 @@ This module creates :
 | kube\_dashboard | n/a | `bool` | n/a | yes |
 | kubernetes\_version | The AKS Kubernetes version | `string` | n/a | yes |
 | location | The Azure Region where the Resource Group should exist. | `string` | n/a | yes |
+| log\_analytics\_workspace\_name | The name of the resource group in which the Log Analytics workspace is created | `string` | n/a | yes |
+| log\_analytics\_workspace\_sku | Specifies the Sku of the Log Analytics Workspace. | `string` | `"PerNode"` | no |
 | max\_graceful\_termination\_sec | n/a | `string` | `"600"` | no |
 | network\_plugin | The CNI network plugin to use (only azure, or kubenet) | `string` | `"kubenet"` | no |
 | network\_policy | The network polcy for the CNI. Only used when network\_plugin is set to azure. Supported values: calico, azure | `any` | n/a | yes |
 | node\_availability\_zones | The availability zones to place the node pool instances | `list` | <pre>[<br>  1,<br>  2,<br>  3<br>]</pre> | no |
 | node\_count | The default node pool instance count | `number` | n/a | yes |
+| node\_labels | n/a | `map` | <pre>{<br>  "service": "kubernetes"<br>}</pre> | no |
 | node\_max\_count | Default node pool max count (use with autoscaling) | `number` | `10` | no |
 | node\_max\_pods | Total amount of pods allowed per node | `number` | `110` | no |
 | node\_min\_count | Default node pool intial count (used with autoscaling) | `number` | `1` | no |
-| node\_pools | Addons node pools | <pre>list(object({<br>    name                = string<br>    vm_size             = string<br>    os_disk_size_gb     = number<br>    enable_auto_scaling = bool<br>    node_count          = number<br>    min_count           = number<br>    max_count           = number<br>    max_pods            = number<br>    node_taints         = list(string)<br>  }))</pre> | `[]` | no |
+| node\_pools | Addons node pools | <pre>list(object({<br>    name                = string<br>    vm_size             = string<br>    os_disk_size_gb     = number<br>    enable_auto_scaling = bool<br>    node_count          = number<br>    min_count           = number<br>    max_count           = number<br>    max_pods            = number<br>    node_taints         = list(string)<br>    node_labels         = map(string)<br>  }))</pre> | `[]` | no |
 | node\_taints | Taints for default pool nodes | `list(string)` | n/a | yes |
 | node\_vm\_size | The Azure VM instance type | `string` | n/a | yes |
 | os\_disk\_size\_gb | Default node pool disk size | `number` | `50` | no |
@@ -191,6 +197,7 @@ This module creates :
 | pod\_security\_policy | Enable PodSecurityPolicy the Kubernetes API | `bool` | n/a | yes |
 | rbac | Enable RBAC on the Kubernetes API | `bool` | `true` | no |
 | resource\_group\_name | The Name which should be used for this Resource Group | `string` | n/a | yes |
+| retention\_in\_days | The workspace data retention in days | `string` | n/a | yes |
 | scale\_down\_delay\_after\_add | n/a | `string` | `"10m"` | no |
 | scale\_down\_delay\_after\_delete | n/a | `string` | `"10s"` | no |
 | scale\_down\_delay\_after\_failure | n/a | `string` | `"10m"` | no |
@@ -204,7 +211,7 @@ This module creates :
 | tags | n/a | `map` | <pre>{<br>  "made-by": "terraform"<br>}</pre> | no |
 | virtual\_network\_name | Name of the Virtual Network this Subnet is located within | `string` | n/a | yes |
 
-## Outputs
+### Outputs
 
 | Name | Description |
 |------|-------------|

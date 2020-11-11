@@ -73,6 +73,8 @@ resource "azurerm_kubernetes_cluster" "main" {
     enabled = var.rbac
   }
 
+  api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
+
   network_profile {
     network_plugin     = var.network_plugin
     network_policy     = var.network_plugin == "kubenet" ? null : var.network_policy
