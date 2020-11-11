@@ -1,6 +1,6 @@
 # terraform-azure-kubernetes
 
-Terraform module which configure a Kubernetes cluster on AWS
+Terraform module which configure a Kubernetes cluster (AKS) on Microsoft Azure
 
 ## Versions
 
