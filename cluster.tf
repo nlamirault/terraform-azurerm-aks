@@ -49,10 +49,6 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   enable_pod_security_policy = var.pod_security_policy
 
-  role_based_access_control {
-    enabled = var.rbac
-  }
-
   api_server_authorized_ip_ranges = var.api_server_authorized_ip_ranges
 
   network_profile {
@@ -85,8 +81,6 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     oms_agent {
       enabled = false
     }
-
-
   }
 
   auto_scaler_profile {
@@ -103,6 +97,17 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
   identity {
     type = "SystemAssigned"
+  }
+
+  role_based_access_control {
+    enabled = true
+
+    azure_active_directory {
+      managed = true
+      admin_group_object_ids = [
+        data.azuread_group.aks.id
+      ]
+    }
   }
 
   # service_principal {
