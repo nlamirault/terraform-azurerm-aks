@@ -126,8 +126,8 @@ node_labels = {
 #############################################################################
 # Network profile
 
-network_plugin = "kubenet"
-network_policy = "azure"
+network_plugin = "azure"
+network_policy = "calico"
 pod_cidr       = "10.0.16.0/20"
 service_cidr   = "10.0.32.0/20"
 dns_service_ip = "10.0.32.10"
@@ -147,7 +147,24 @@ azure_policy = false
 #############################################################################
 # Addons node pool
 
-node_pools = []
+node_pools = [
+  {
+    name = "spot"
+    vm_size = "Standard_D2s_v3"
+    os_disk_size_gb = 50
+    enable_auto_scaling = true
+    node_count = 1
+    min_count = 1
+    max_count = 4
+    max_pods = 110
+    node_labels = {
+      "kubernetes.azure.com/scalesetpriority" = "spot"
+    },
+    node_taints = [
+      "kubernetes.azure.com/scalesetpriority=spot:NoSchedule"
+    ],
+  }
+]
 ```
 
 This module creates :

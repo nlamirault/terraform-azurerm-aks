@@ -13,17 +13,13 @@
 # limitations under the License.
 
 output "aks_kube_config" {
-  value = azurerm_kubernetes_cluster.main.kube_config_raw
+  value = azurerm_kubernetes_cluster.k8s.kube_config_raw
 }
 
 output "aks_clustername" {
-  value = azurerm_kubernetes_cluster.main.name
+  value = azurerm_kubernetes_cluster.k8s.name
 }
 
-output "service_cidr" {
-  value = azurerm_kubernetes_cluster.main.network_profile.0.service_cidr
-}
-
-output "pod_cidr" {
-  value = azurerm_kubernetes_cluster.main.network_profile.0.pod_cidr
+output "aks_service_principal_id" {
+  value = azurerm_kubernetes_cluster.k8s.identity[0].principal_id
 }

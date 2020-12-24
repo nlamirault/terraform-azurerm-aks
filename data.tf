@@ -12,27 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = ">= 0.13.3"
+data "azurerm_subscription" "main" {
+}
 
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 2.35.0"
-    }
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = "~> 1.0.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.0"
-    }
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 3.0"
-    }
+data "azurerm_resource_group" "k8s" {
+  name = var.resource_group_name
+}
 
-  }
-
+data "azurerm_subnet" "nodes" {
+  name                 = var.subnet_name
+  resource_group_name  = data.azurerm_resource_group.k8s.name
+  virtual_network_name = var.virtual_network_name
 }

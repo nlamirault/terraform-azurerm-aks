@@ -12,25 +12,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-resource "azurerm_log_analytics_workspace" "aks" {
-  name                = var.log_analytics_workspace_name
+resource "azurerm_container_registry" "acr" {
+  name                = replace(var.cluster_name, "-", "")
   resource_group_name = data.azurerm_resource_group.k8s.name
   location            = data.azurerm_resource_group.k8s.location
-  sku                 = var.log_analytics_workspace_sku
-  retention_in_days   = var.retention_in_days
-  tags                = var.tags
+  sku                 = "Standard"
+  admin_enabled       = false
 }
 
-resource "azurerm_log_analytics_solution" "aks" {
-  solution_name         = "ContainerInsights"
-  resource_group_name   = data.azurerm_resource_group.k8s.name
-  location              = data.azurerm_resource_group.k8s.location
-  workspace_resource_id = azurerm_log_analytics_workspace.aks.id
-  workspace_name        = azurerm_log_analytics_workspace.aks.name
-  tags                  = var.tags
+resource "azurerm_role_assignment" "networking" {
+  scope                = data.azurerm_resource_group.k8s.id
+  role_definition_name = "Network Contributor"
+  principal_id         = azurerm_kubernetes_cluster.k8s.identity[0].principal_id
+}
 
-  plan {
-    publisher = "Microsoft"
-    product   = "OMSGallery/ContainerInsights"
-  }
+resource "azurerm_role_assignment" "acr_pull" {
+  scope                = azurerm_container_registry.acr.id
+  role_definition_name = "AcrPull"
+  principal_id         = azurerm_kubernetes_cluster.k8s.kubelet_identity[0].object_id
 }

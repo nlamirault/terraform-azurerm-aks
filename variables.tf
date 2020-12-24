@@ -41,35 +41,6 @@ variable virtual_network_name {
   description = "Name of the Virtual Network this Subnet is located within"
 }
 
-#variable subnet_name_services {
-#  type = string
-#  description = "Name of the Subnet for Services"
-#}
-
-#variable subnet_name_pods {
-#  type = string
-#  description = "Name of the Subnet for Pods"
-#}
-
-#############################################################################
-# Log Analytics
-
-variable "log_analytics_workspace_name" {
-  type        = string
-  description = " The name of the resource group in which the Log Analytics workspace is created"
-}
-
-variable "log_analytics_workspace_sku" {
-  type        = string
-  description = "Specifies the Sku of the Log Analytics Workspace."
-  default     = "PerNode"
-}
-
-variable "retention_in_days" {
-  type        = string
-  description = "The workspace data retention in days"
-}
-
 
 #############################################################################
 # Kubernetes cluster
