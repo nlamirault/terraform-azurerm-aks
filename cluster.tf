@@ -12,35 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-data "azurerm_resource_group" "k8s" {
-  name = var.resource_group_name
-}
-
-data "azurerm_subnet" "nodes" {
-  name                 = var.subnet_name
-  resource_group_name  = data.azurerm_resource_group.k8s.name
-  virtual_network_name = var.virtual_network_name
-}
-
-#data "azurerm_subnet" "services" {
-#  name                 = var.subnet_name_services
-#  resource_group_name  = data.azurerm_resource_group.k8s.name
-#  virtual_network_name = var.virtual_network_name
-#}
-
-#data "azurerm_subnet" "pods" {
-#  name                 = var.subnet_name_pods
-#  resource_group_name  = data.azurerm_resource_group.k8s.name
-#  virtual_network_name = var.virtual_network_name
-#}
-
-resource "azurerm_kubernetes_cluster" "main" {
+resource "azurerm_kubernetes_cluster" "k8s" {
   name                = var.cluster_name
   location            = data.azurerm_resource_group.k8s.location
   resource_group_name = data.azurerm_resource_group.k8s.name
   dns_prefix          = var.cluster_name
 
   kubernetes_version = var.kubernetes_version
+
+  # private_cluster_enabled = true
 
   #linux_profile {
   #  admin_username = var.admin_username
@@ -78,9 +58,9 @@ resource "azurerm_kubernetes_cluster" "main" {
   network_profile {
     network_plugin     = var.network_plugin
     network_policy     = var.network_plugin == "kubenet" ? null : var.network_policy
+    pod_cidr           = var.network_policy == "kubenet" ? var.pod_cidr : null
     docker_bridge_cidr = var.docker_bridge_cidr
     dns_service_ip     = var.dns_service_ip
-    pod_cidr           = var.pod_cidr     # var.network_policy == "azure" ? null: var.pod_cidr
     service_cidr       = var.service_cidr # data.azurerm_subnet.services.address_prefixes[0]
     load_balancer_sku  = "standard"
   }
@@ -103,8 +83,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     }
 
     oms_agent {
-      enabled                    = true
-      log_analytics_workspace_id = azurerm_log_analytics_workspace.aks.id
+      enabled = false
     }
 
 
@@ -126,10 +105,10 @@ resource "azurerm_kubernetes_cluster" "main" {
     type = "SystemAssigned"
   }
 
-  #service_principal {
-  #  client_id     = var.client_id
-  #  client_secret = var.client_secret
-  #}
+  # service_principal {
+  #   client_id     = azuread_application.k8s.application_id
+  #   client_secret = azuread_service_principal_password.k8s.value
+  # }
 
   tags = var.tags
 
@@ -137,6 +116,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     ignore_changes = [
       # Since autoscaling is enabled, let's ignore changes to the node count.
       default_node_pool[0].node_count,
+      service_principal
     ]
   }
 }

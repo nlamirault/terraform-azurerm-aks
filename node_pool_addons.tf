@@ -17,7 +17,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "ops" {
 
   name                  = var.node_pools[count.index].name
   orchestrator_version  = var.kubernetes_version
-  kubernetes_cluster_id = azurerm_kubernetes_cluster.main
+  kubernetes_cluster_id = azurerm_kubernetes_cluster.k8s.id
   vnet_subnet_id        = data.azurerm_subnet.nodes.id
   availability_zones    = var.node_availability_zones
   os_type               = "Linux"
