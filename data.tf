@@ -24,3 +24,7 @@ data "azurerm_subnet" "nodes" {
   resource_group_name  = data.azurerm_resource_group.k8s.name
   virtual_network_name = var.virtual_network_name
 }
+
+data "azuread_group" "aks" {
+  name = var.aad_group_name
+}
