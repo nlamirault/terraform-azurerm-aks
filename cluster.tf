@@ -102,12 +102,12 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   role_based_access_control {
     enabled = true
 
-    azure_active_directory {
-      managed = true
-      admin_group_object_ids = [
-        data.azuread_group.aks.id
-      ]
-    }
+    #azure_active_directory {
+    #  managed = true
+    #  admin_group_object_ids = [
+    #    data.azuread_group.aks.id
+    #  ]
+    #}
   }
 
   # service_principal {
