@@ -25,6 +25,11 @@ data "azurerm_subnet" "nodes" {
   virtual_network_name = var.virtual_network_name
 }
 
-data "azuread_group" "aks" {
-  name = var.aad_group_name
+#data "azuread_group" "aks" {
+#  name = var.aad_group_name
+#}
+
+data "azurerm_user_assigned_identity" "k8s" {
+  name                = format("%s-agentpool", azurerm_kubernetes_cluster.k8s.name)
+  resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
 }
