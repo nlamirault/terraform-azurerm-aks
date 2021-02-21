@@ -12,14 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-output "aks_kube_config" {
-  value = azurerm_kubernetes_cluster.k8s.kube_config_raw
-}
+terraform {
+  required_version = ">= 0.13.3"
 
-output "aks_clustername" {
-  value = azurerm_kubernetes_cluster.k8s.name
-}
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = "~> 2.45.0"
+    }
+    # azuread = {
+    #   source  = "hashicorp/azuread"
+    #   version = "~> 1.3.0"
+    # }
+    # random = {
+    #   source  = "hashicorp/random"
+    #   version = "~> 3.0"
+    # }
+    # null = {
+    #   source  = "hashicorp/null"
+    #   version = "~> 3.0"
+    # }
+  }
 
-output "aks_service_principal_id" {
-  value = azurerm_kubernetes_cluster.k8s.identity[0].principal_id
 }
