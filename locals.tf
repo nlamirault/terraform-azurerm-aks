@@ -12,27 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-terraform {
-  required_version = ">= 0.13.3"
-
-  required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 2.45.0"
-    }
-    azuread = {
-      source  = "hashicorp/azuread"
-      version = "~> 1.3.0"
-    }
-    random = {
-      source  = "hashicorp/random"
-      version = "~> 3.0"
-    }
-    null = {
-      source  = "hashicorp/null"
-      version = "~> 3.0"
-    }
-
-  }
-
+locals {
+  service_name            = format("%s-aks", var.resource_group_name)
+  container_registry_name = replace(local.service_name, "-", "")
+  # ad_server    = format("%s-server", var.cluster_name)
+  # ad_client    = format("%s-client", var.cluster_name)
+  # ad_admins    = format("%s-cluster-admins", var.cluster_name)
 }

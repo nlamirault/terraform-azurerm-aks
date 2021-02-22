@@ -12,24 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# data "azurerm_subscription" "main" {
-# }
-
-# data "azurerm_resource_group" "k8s" {
-#   name = var.resource_group_name
-# }
-
-data "azurerm_subnet" "nodes" {
-  name                 = var.subnet_name
-  virtual_network_name = var.virtual_network_name
-  resource_group_name  = var.vnet_resource_group_name
+resource "azurerm_resource_group" "aks" {
+  name     = local.service_name
+  location = var.resource_group_location
+  tags     = var.tags
 }
-
-#data "azuread_group" "aks" {
-#  name = var.aad_group_name
-#}
-
-# data "azurerm_user_assigned_identity" "k8s" {
-#   name                = format("%s-agentpool", azurerm_kubernetes_cluster.k8s.name)
-#   resource_group_name = azurerm_kubernetes_cluster.k8s.node_resource_group
-# }
