@@ -13,15 +13,15 @@
 # limitations under the License.
 
 resource "azurerm_container_registry" "acr" {
-  name                = replace(var.cluster_name, "-", "")
-  resource_group_name = data.azurerm_resource_group.k8s.name
-  location            = data.azurerm_resource_group.k8s.location
+  name                = local.container_registry_name
+  resource_group_name = azurerm_resource_group.aks.name
+  location            = azurerm_resource_group.aks.location
   sku                 = "Standard"
   admin_enabled       = false
 }
 
 resource "azurerm_role_assignment" "networking" {
-  scope                = data.azurerm_resource_group.k8s.id
+  scope                = azurerm_resource_group.aks.id
   role_definition_name = "Network Contributor"
   principal_id         = azurerm_kubernetes_cluster.k8s.identity[0].principal_id
 }

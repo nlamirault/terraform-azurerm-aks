@@ -46,6 +46,11 @@ variable "virtual_network_name" {
   description = "Name of the Virtual Network this Subnet is located within"
 }
 
+variable "vnet_resource_group_name" {
+  type        = string
+  description = "The Name which should be used for the networking Resource Group"
+}
+
 #############################################################################
 # Active Directory
 

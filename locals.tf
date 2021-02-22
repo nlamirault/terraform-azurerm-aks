@@ -13,7 +13,8 @@
 # limitations under the License.
 
 locals {
-  service_name = format("%s-aks", var.resource_group_name)
+  service_name            = format("%s-aks", var.resource_group_name)
+  container_registry_name = replace(local.service_name, "-", "")
   # ad_server    = format("%s-server", var.cluster_name)
   # ad_client    = format("%s-client", var.cluster_name)
   # ad_admins    = format("%s-cluster-admins", var.cluster_name)
