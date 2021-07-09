@@ -80,7 +80,7 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     }
 
     oms_agent {
-      enabled = false
+      enabled = false # tfsec:ignore:AZU009
     }
   }
 
