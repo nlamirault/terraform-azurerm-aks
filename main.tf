@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Nicolas Lamirault <nicolas.lamirault@gmail.com>
+# Copyright (C) 2021 Nicolas Lamirault <nicolas.lamirault@gmail.com>
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 # limitations under the License.
 
 terraform {
-  required_version = ">= 0.14.0"
+  required_version = ">= 1.0.0"
 
   required_providers {
     azurerm = {
