@@ -23,15 +23,6 @@ variable "resource_group_name" {
   description = "The Name which should be used for this Resource Group"
 }
 
-variable "resource_group_location" {
-  type        = string
-  description = "The Azure Region where the Resource Group should exist."
-}
-
-#variable subscription_id {
-#  type        = string
-#  description = "Specifies the ID of the subscription"
-#}
 
 #############################################################################
 # Networking
@@ -67,14 +58,15 @@ variable "cluster_name" {
   description = "Name of the AKS cluster"
 }
 
-variable "cluster_location" {
-  type        = string
-  description = "The Azure Region where the Resource Group should exist."
-}
-
 variable "kubernetes_version" {
   type        = string
   description = "The AKS Kubernetes version"
+}
+
+variable "private_cluster_enabled" {
+  description = "If true cluster API server will be exposed only on internal IP address and available only in cluster vnet."
+  type        = bool
+  default     = false
 }
 
 #variable admin_username {
@@ -181,6 +173,51 @@ variable "aci_connector_linux" {
 variable "azure_policy" {
   description = "Is the Azure Policy for Kubernetes Add On enabled"
   type        = bool
+}
+
+variable "enable_open_service_mesh" {
+  description = "Enable Open Service Mesh Addon."
+  type        = bool
+  default     = false
+}
+
+variable "enable_ingress_application_gateway" {
+  description = "If true will enable Application Gateway ingress controller to this Kubernetes Cluster"
+  type        = bool
+  default     = false
+}
+
+variable "ingress_application_gateway_subnet_id" {
+  description = "The ID of the subnet on which to create an Application Gateway, which in turn will be integrated with the ingress controller of this Kubernetes Cluster"
+  type        = string
+  default     = null
+}
+
+#############################################################################
+# Maintenance
+
+variable "enable_maintenance_window" {
+  description = "Enable maintenance for AKS cluster"
+  type        = bool
+  default     = false
+}
+
+variable "maintenance_allowed" {
+  description = "Days and hours when maintenance is allowed"
+  type = list(object({
+    day   = string
+    hours = list(string)
+  }))
+  default = []
+}
+
+variable "maintenance_not_allowed" {
+  description = "Days and hours when maintenance is not allowed"
+  type = list(object({
+    end   = string
+    start = string
+  }))
+  default = []
 }
 
 #############################################################################

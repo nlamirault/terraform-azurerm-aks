@@ -13,15 +13,16 @@
 # limitations under the License.
 
 resource "azurerm_kubernetes_cluster" "k8s" {
-  name                = var.cluster_name
-  location            = var.cluster_location
-  resource_group_name = azurerm_resource_group.aks.name
+  name = var.cluster_name
+
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 
   dns_prefix = var.cluster_name
 
   kubernetes_version = var.kubernetes_version
 
-  # private_cluster_enabled = true
+  private_cluster_enabled = var.private_cluster_enabled
 
   #linux_profile {
   #  admin_username = var.admin_username
@@ -62,6 +63,24 @@ resource "azurerm_kubernetes_cluster" "k8s" {
     load_balancer_sku  = "standard"
   }
 
+  maintenance_window {
+    dynamic "allowed" {
+      for_each = var.enable_maintenance_window == true ? var.maintenance_allowed : []
+      content {
+        day   = allowed.value.day
+        hours = allowed.value.hours
+      }
+    }
+
+    dynamic "not_allowed" {
+      for_each = var.enable_maintenance_window == true ? var.maintenance_not_allowed : []
+      content {
+        start = not_allowed.value.start
+        end   = not_allowed.value.end
+      }
+    }
+  }
+
   addon_profile {
     aci_connector_linux {
       enabled = var.aci_connector_linux
@@ -81,6 +100,15 @@ resource "azurerm_kubernetes_cluster" "k8s" {
 
     oms_agent {
       enabled = false # tfsec:ignore:AZU009
+    }
+
+    open_service_mesh {
+      enabled = var.enable_open_service_mesh
+    }
+
+    ingress_application_gateway {
+      enabled   = var.enable_ingress_application_gateway
+      subnet_id = var.ingress_application_gateway_subnet_id
     }
   }
 

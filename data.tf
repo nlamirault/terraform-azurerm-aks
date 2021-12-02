@@ -15,9 +15,9 @@
 # data "azurerm_subscription" "main" {
 # }
 
-# data "azurerm_resource_group" "k8s" {
-#   name = var.resource_group_name
-# }
+data "azurerm_resource_group" "main" {
+  name = var.resource_group_name
+}
 
 data "azurerm_subnet" "nodes" {
   name                 = var.subnet_name

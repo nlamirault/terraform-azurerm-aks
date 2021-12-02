@@ -47,14 +47,3 @@ plugin "azurerm" {
     version = "0.11.0"
     source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
 }
-
-###############################################################################
-# PORTEFAIX
-
-plugin "portefaix" {
-  enabled = true
-}
-
-rule "terraform_portefaix_standard_structure" { enabled = false }
-rule "terraform_portefaix_standard_files" { enabled = false }
-rule "terraform_portefaix_tfenv" { enabled = true }
